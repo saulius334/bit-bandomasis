@@ -22,7 +22,7 @@ class Gate
 
         $permissions = [
             1 => ['user', 'home'],
-            10 => ['user', 'admin', 'home']
+            2 => ['admin', 'user', 'home']
         ];
 
         if (!FacadesAuth::user()) {

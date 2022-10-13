@@ -1,46 +1,44 @@
 <?php
 
-use App\Http\Controllers\CommentController as comCon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MovieController as movieCon;
 use App\Http\Controllers\HomeController as homeCon;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
+use App\Http\Controllers\AdminController as adminCon;
+use App\Http\Controllers\ClientController as clientCon;
+use App\Http\Controllers\HotelController as hotCon;
+use App\Http\Controllers\CountryController as couCon;
 
 
 Auth::routes();
 
-Route::get('/', [homeCon::class, 'homeList'])->name('home')->middleware('gate:home');
-Route::put('/rate/{movie}', [homeCon::class, 'rate'])->name('rate')->middleware('gate:user');
-Route::post('/comment/{movie}', [homeCon::class, 'addComment'])->name('comment')->middleware('gate:user');
+Route::get('/', [homeCon::class, 'index'])->name('home')->middleware('gate:user');
 
-
-Route::prefix('movie')->name('m_')->group(function () {
-    Route::get('/', [movieCon::class, 'index'])->name('index')->middleware('gate:user');
-    Route::get('/create', [movieCon::class, 'create'])->name('create')->middleware('gate:admin');
-    Route::post('/create', [movieCon::class, 'store'])->name('store')->middleware('gate:admin');
-    Route::get('/show/{movie}', [movieCon::class, 'show'])->name('show')->middleware('gate:user');
-    Route::delete('/delete/{movie}', [movieCon::class, 'destroy'])->name('delete')->middleware('gate:admin');
-    Route::get('/edit/{movie}', [movieCon::class, 'edit'])->name('edit')->middleware('gate:admin');
-    Route::put('/edit/{movie}', [movieCon::class, 'update'])->name('update')->middleware('gate:admin');
+Route::prefix('user')->name('u_')->group(function () {
+    Route::get('/yourTravels', [clientCon::class, 'index'])->name('yourTravels')->middleware('gate:user');
+    Route::get('/show/{country}', [clientCon::class, 'show'])->name('show')->middleware('gate:user');
 });
 
-Route::prefix('comment')->name('c_')->group(function () {
-    Route::get('/', [comCon::class, 'index'])->name('index')->middleware('gate:user');
-    Route::delete('/delete/{comment}', [comCon::class, 'destroy'])->name('delete')->middleware('gate:admin');
-    // Route::post('/create', [movieCon::class, 'store'])->name('store')->middleware('gate:admin');
-    // Route::get('/show/{movie}', [movieCon::class, 'show'])->name('show')->middleware('gate:user');
-    // Route::delete('/delete/{movie}', [movieCon::class, 'destroy'])->name('delete')->middleware('gate:admin');
-    // Route::get('/edit/{movie}', [movieCon::class, 'edit'])->name('edit')->middleware('gate:admin');
-    // Route::put('/edit/{movie}', [movieCon::class, 'update'])->name('update')->middleware('gate:admin');
+Route::prefix('admin')->name('a_')->group(function () {
+    Route::get('/requests', [adminCon::class, 'index'])->name('index')->middleware('gate:admin');
+    
+});
+
+Route::prefix('country')->name('c_')->group(function () {
+    Route::get('/', [couCon::class, 'index'])->name('index')->middleware('gate:user');
+    Route::get('/create', [couCon::class, 'create'])->name('create')->middleware('gate:admin');
+    Route::post('/create', [couCon::class, 'store'])->name('store')->middleware('gate:admin');
+    Route::get('/show/{country}', [couCon::class, 'show'])->name('show')->middleware('gate:user');
+    Route::delete('/delete/{country}', [couCon::class, 'destroy'])->name('delete')->middleware('gate:admin');
+    Route::get('/edit/{country}', [couCon::class, 'edit'])->name('edit')->middleware('gate:admin');
+    Route::put('/edit/{country}', [couCon::class, 'update'])->name('update')->middleware('gate:admin');
+});
+
+Route::prefix('hotel')->name('h_')->group(function () {
+    Route::get('/', [hotCon::class, 'index'])->name('index')->middleware('gate:user');
+    Route::get('/create', [hotCon::class, 'create'])->name('create')->middleware('gate:admin');
+    Route::post('/create', [hotCon::class, 'store'])->name('store')->middleware('gate:admin');
+    Route::get('/show/{hotel}', [hotCon::class, 'show'])->name('show')->middleware('gate:user');
+    Route::delete('/delete/{hotel}', [hotCon::class, 'destroy'])->name('delete')->middleware('gate:admin');
+    Route::get('/edit/{hotel}', [hotCon::class, 'edit'])->name('edit')->middleware('gate:admin');
+    Route::put('/edit/{hotel}', [hotCon::class, 'update'])->name('update')->middleware('gate:admin');
 });
